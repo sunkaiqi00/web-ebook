@@ -1,0 +1,5 @@
+// 设置rem 自适应
+$ratio: 375 / 10;
+@function ptr($px) {
+  @return $px / $ratio + rem;
+}

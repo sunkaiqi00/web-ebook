@@ -1,15 +1,20 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-Vue.use(Vuex)
+import Vue from 'vue';
+import Vuex from 'vuex';
+import book from './module/book';
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    count: 0
   },
-  mutations: {
+  mutations: {},
+  getters: {
+    getCount(state) {
+      return state.count;
+    }
   },
-  actions: {
-  },
+  actions: {},
   modules: {
+    book
   }
-})
+});
