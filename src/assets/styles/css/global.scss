@@ -1,5 +1,21 @@
 // 设置rem 自适应
 $ratio: 375 / 10;
-@function ptr($px) {
+@function px2rem($px) {
   @return $px / $ratio + rem;
+}
+
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@mixin left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+@mixin right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }

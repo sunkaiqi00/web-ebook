@@ -1,24 +1,10 @@
 <template>
   <div id="app">
-    <span class="icon-clock"></span>
-    <div class="text">kaihuai</div>
-    <div>{{$store.getters.getName}}</div>
-    <div>{{$store.getters.getInfo}}</div>
     <router-view />
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
-export default {
-  computed: {
-    ...mapGetters(['getCount', 'getName', 'getInfo']),
-  },
-
-  mounted() {
-    console.log(this.getInfo)
-    console.log(this.getCount)
-  },
-}
+export default {}
 // 设置1rem的值为多少
 document.addEventListener('DOMContentLoaded', () => {
   const html = document.querySelector('html')
@@ -29,9 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 </script>
 <style lang="scss" scoped>
-@import '@/assets/styles/css/global.scss';
-.text {
-  font-family: 'Days One';
-  font-size: ptr(75);
+#app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 </style>
