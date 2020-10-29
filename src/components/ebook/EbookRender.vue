@@ -17,6 +17,7 @@ import {
   saveFontSize,
   getTheme,
   saveTheme,
+  getLocation,
 } from '@/utils/localStorage'
 
 export default {
@@ -25,14 +26,18 @@ export default {
     // 上一页
     prevPage() {
       if (this.rendition) {
-        this.rendition.prev()
+        this.rendition.prev().then(() => {
+          this.refreshLocation()
+        })
         this.hideTitleAndMenu()
       }
     },
     // 下一页
     nextPage() {
       if (this.rendition) {
-        this.rendition.next()
+        this.rendition.next().then(() => {
+          this.refreshLocation()
+        })
         this.hideTitleAndMenu()
       }
     },
@@ -52,7 +57,7 @@ export default {
     // 初始化字体
     initFontFamily() {
       // 初次判断 是否有字体 没有设置默认字体
-      let fontFamily = getFontFamily(this.fileName).fontFamily
+      let fontFamily = getFontFamily(this.fileName)
       if (!fontFamily) {
         saveFontFamily(this.fileName, this.defaultFontFamily)
       } else {
@@ -64,7 +69,7 @@ export default {
     },
     // 初始化字体大小
     initFontSize() {
-      let fontSize = getFontSize(this.fileName).fontSize
+      let fontSize = getFontSize(this.fileName)
       if (!fontSize) {
         saveFontSize(this.fileName, this.defaultFontSize)
       } else {
@@ -76,58 +81,36 @@ export default {
     initTheme() {
       let defaultTheme = getTheme(this.fileName)
       if (!defaultTheme) {
-        defaultTheme = {}
-        defaultTheme['theme'] = this.themeList[0].name
-        saveTheme(this.fileName, defaultTheme.theme)
+        // defaultTheme = {}
+        defaultTheme = this.themeList[0].name
+        saveTheme(this.fileName, defaultTheme)
       }
-      this.setDefaultTheme(defaultTheme.theme)
+      this.setDefaultTheme(defaultTheme)
       this.themeList.forEach((theme) => {
         // 注册所有样式
         this.rendition.themes.register(theme.name, theme.style)
       })
       // 选择默认样式
-      this.rendition.themes.select(defaultTheme.theme)
+      this.rendition.themes.select(defaultTheme)
     },
-    initEpub() {
-      // 拼接路径 访问 nginx 静态资源
-      const url =
-        process.env.VUE_APP_RES_URL + '/epub/' + this.fileName + '.epub'
-      // console.log(url)
-      // 1. 通过url 生成Book对象
-      this.book = new Epub(url)
-      this.setCurrentBook(this.book)
+    // 初始化 book的rendition对象
+    initRenition() {
       // 2. 生成Rendition 通过Book.renderTo  绑定一个DOM
-      ;(this.rendition = this.book.renderTo('read', {
+      this.rendition = this.book.renderTo('read', {
         width: innerWidth,
         height: innerHeight,
         // 微信兼容
         method: 'default',
-      })),
-        // 3. 通过Rendition.display 渲染电子书
-        this.rendition.display().then(() => {
-          this.initTheme()
-          this.initFontFamily()
-          this.initFontSize()
-          // 全局样式设置
-          this.initGlobalStyle()
-        })
-      // 电子书通过 iframe 实现   给iframe绑定事件 通过手指滑动距离和时间 判断上一页或下一页
-      this.rendition.on('touchstart', (event) => {
-        this.touchStartX = event.changedTouches[0].clientX
-        this.touchStartTime = event.timeStamp
       })
-      this.rendition.on('touchend', (event) => {
-        const offsetX = event.changedTouches[0].clientX - this.touchStartX
-        const time = event.timeStamp - this.touchStartTime
-        if (time < 500 && offsetX > 40) {
-          this.prevPage()
-        } else if (time < 500 && offsetX < -40) {
-          this.nextPage()
-        } else {
-          this.toggleTitleAndMenu()
-        }
-        event.preventDefault()
-        event.stopPropagation()
+      let location = getLocation(this.fileName)
+      // 3. 通过Rendition.display 渲染电子书及相关设置信息
+      this.display(location, () => {
+        this.initTheme()
+        this.initFontFamily()
+        this.initFontSize()
+        // 全局样式设置
+        this.initGlobalStyle()
+        this.refreshLocation()
       })
       // 给 epub 注入字体  (iframe来显示电子书 DOM不继承)
       this.rendition.hooks.content.register((contents) => {
@@ -149,6 +132,49 @@ export default {
           // console.log('字体加载完毕...')
         })
       })
+    },
+    // 手势操作
+    initGesture() {
+      // 电子书通过 iframe 实现   给iframe绑定事件 通过手指滑动距离和时间 判断上一页或下一页
+      this.rendition.on('touchstart', (event) => {
+        this.touchStartX = event.changedTouches[0].clientX
+        this.touchStartTime = event.timeStamp
+      })
+      this.rendition.on('touchend', (event) => {
+        const offsetX = event.changedTouches[0].clientX - this.touchStartX
+        const time = event.timeStamp - this.touchStartTime
+        if (time < 500 && offsetX > 40) {
+          this.prevPage()
+        } else if (time < 500 && offsetX < -40) {
+          this.nextPage()
+        } else {
+          this.toggleTitleAndMenu()
+        }
+        event.preventDefault()
+        event.stopPropagation()
+      })
+    },
+    initEpub() {
+      // 拼接路径 访问 nginx 静态资源
+      const url =
+        process.env.VUE_APP_RES_URL + '/epub/' + this.fileName + '.epub'
+      // console.log(url)
+      // 1. 通过url 生成Book对象
+      this.book = new Epub(url)
+      this.setCurrentBook(this.book)
+      this.initRenition()
+      this.initGesture()
+      this.book.ready
+        .then(() => {
+          return this.book.locations.generate(
+            750 * (window.innerWidth / 375) * getFontSize(this.fileName / 16)
+          )
+        })
+        .then((locations) => {
+          // console.log(locations)
+          this.setBookAvailable(true)
+          this.refreshLocation()
+        })
     },
   },
   mounted() {

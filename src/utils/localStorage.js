@@ -32,7 +32,7 @@ export function setBookObject(fileName, key, value) {
 export function getBookObject(fileName, key) {
   let book = getLocalStorage(`${fileName}-info`);
   if (book) {
-    return book;
+    return book[key];
   } else {
     return null;
   }

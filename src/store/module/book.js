@@ -14,6 +14,7 @@ const book = {
     defaultTheme: 'Default',
     bookAvailable: false,
     progress: 0,
+    // 章节
     section: 0,
     isPaginating: true,
     currentBook: null,

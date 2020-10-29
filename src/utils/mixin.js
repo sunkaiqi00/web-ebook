@@ -1,6 +1,6 @@
 import { mapGetters, mapActions } from 'vuex';
 import { themeList, addCss, removeAllCss } from '@/utils/book';
-
+import { saveLocation } from '@/utils/localStorage';
 export const ebookMixin = {
   computed: {
     ...mapGetters([
@@ -69,6 +69,32 @@ export const ebookMixin = {
         default:
           addCss(`${process.env.VUE_APP_RES_URL}/theme/theme_default.css`);
           break;
+      }
+    },
+    // 切换章节 刷新进度条
+    refreshLocation() {
+      // 获取当前章节信息
+      let currentLocation = this.currentBook.rendition.currentLocation();
+      let startCfi = currentLocation.start.cfi;
+      // 通过 章节开始cfi 获取相对全书的比率
+      let progress = this.currentBook.locations.percentageFromCfi(startCfi);
+      // 刷新进度条
+      this.setProgress(Math.floor(progress * 100));
+      // 存储
+      this.setSection(currentLocation.start.index);
+      saveLocation(this.fileName, startCfi);
+    },
+    display(target, callBack) {
+      if (target) {
+        this.currentBook.rendition.display(target).then(() => {
+          this.refreshLocation();
+          if (callBack) callBack();
+        });
+      } else {
+        this.currentBook.rendition.display().then(() => {
+          this.refreshLocation();
+          if (callBack) callBack();
+        });
       }
     }
   }
