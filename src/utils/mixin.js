@@ -1,5 +1,5 @@
 import { mapGetters, mapActions } from 'vuex';
-import { themeList, addCss, removeAllCss } from '@/utils/book';
+import { themeList, addCss, removeAllCss, getReadTimeToMinute } from '@/utils/book';
 import { saveLocation } from '@/utils/localStorage';
 export const ebookMixin = {
   computed: {
@@ -75,14 +75,16 @@ export const ebookMixin = {
     refreshLocation() {
       // 获取当前章节信息
       let currentLocation = this.currentBook.rendition.currentLocation();
-      let startCfi = currentLocation.start.cfi;
-      // 通过 章节开始cfi 获取相对全书的比率
-      let progress = this.currentBook.locations.percentageFromCfi(startCfi);
-      // 刷新进度条
-      this.setProgress(Math.floor(progress * 100));
-      // 存储
-      this.setSection(currentLocation.start.index);
-      saveLocation(this.fileName, startCfi);
+      if (currentLocation && currentLocation.start.cfi) {
+        let startCfi = currentLocation.start.cfi;
+        // 通过 章节开始cfi 获取相对全书的比率
+        let progress = this.currentBook.locations.percentageFromCfi(startCfi);
+        // 刷新进度条
+        this.setProgress(Math.floor(progress * 100));
+        // 存储
+        this.setSection(currentLocation.start.index);
+        saveLocation(this.fileName, startCfi);
+      }
     },
     display(target, callBack) {
       if (target) {
@@ -96,6 +98,16 @@ export const ebookMixin = {
           if (callBack) callBack();
         });
       }
+    },
+    hideTitleAndMenu() {
+      this.setMenuVisible(false);
+      // 隐藏设置控件
+      this.setSettingVisible(-1);
+      // 隐藏 字体选择
+      this.setFontFamilyVisible(false);
+    },
+    getReadTimeText() {
+      return this.$t('book.haveRead').replace('$1', getReadTimeToMinute(this.fileName));
     }
   }
 };

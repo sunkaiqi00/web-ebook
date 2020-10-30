@@ -19,7 +19,7 @@ import {
   saveTheme,
   getLocation,
 } from '@/utils/localStorage'
-
+import { flatten } from '@/utils/book'
 export default {
   mixins: [ebookMixin],
   methods: {
@@ -45,13 +45,6 @@ export default {
     toggleTitleAndMenu() {
       this.setMenuVisible(!this.menuVisible)
       this.setSettingVisible(-1)
-      this.setFontFamilyVisible(false)
-    },
-    hideTitleAndMenu() {
-      this.setMenuVisible(false)
-      // 隐藏设置控件
-      this.setSettingVisible(-1)
-      // 隐藏 字体选择
       this.setFontFamilyVisible(false)
     },
     // 初始化字体
@@ -154,6 +147,41 @@ export default {
         event.stopPropagation()
       })
     },
+    // 获取电子书信息
+    parseBook() {
+      this.book.loaded.cover.then((cover) => {
+        this.book.archive.createUrl(cover).then((url) => {
+          // 写入电子书封面图片到vuex
+          this.setCover(url)
+        })
+        // 书的基本信息
+        this.book.loaded.metadata.then((metadata) => {
+          // console.log(metadata)
+          this.setMetadata(metadata)
+        })
+        this.book.loaded.navigation.then((nav) => {
+          // console.log(nav)
+          // 多维数组转为一维数组  子数组现需要和父数组建立联系
+          const navItem = flatten(nav.toc)
+          // 添加level字段 建立之间的关系
+          function find(item, level = 0) {
+            return !item.parent
+              ? level
+              : find(
+                  navItem.filter((parentItem) => {
+                    return parentItem.id === item.parent
+                  })[0],
+                  ++level
+                )
+          }
+          navItem.forEach((item) => {
+            item.level = find(item)
+          })
+          // console.log(navItem)
+          this.setNavigation(navItem)
+        })
+      })
+    },
     initEpub() {
       // 拼接路径 访问 nginx 静态资源
       const url =
@@ -164,6 +192,7 @@ export default {
       this.setCurrentBook(this.book)
       this.initRenition()
       this.initGesture()
+      this.parseBook()
       this.book.ready
         .then(() => {
           return this.book.locations.generate(
