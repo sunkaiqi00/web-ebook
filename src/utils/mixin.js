@@ -26,6 +26,23 @@ export const ebookMixin = {
     ]),
     themeList() {
       return themeList(this);
+    },
+    // 获取章节名称
+    getSectionName() {
+      // if (this.section) {
+      //   let sectionInfo = this.currentBook.section(this.section)
+      //   {
+      //     if (
+      //       sectionInfo &&
+      //       sectionInfo.href &&
+      //       this.currentBook &&
+      //       this.currentBook.navigation
+      //     ) {
+      //       return this.currentBook.navigation.get(sectionInfo.href).label
+      //     }
+      //   }
+      // }
+      return this.section ? this.navigation[this.section].label : '';
     }
   },
   methods: {
@@ -95,6 +112,18 @@ export const ebookMixin = {
         } else {
           this.setIsBookmark(false);
         }
+        // 关于分页
+        // if (this.pagelist) {
+        //   let totalPage = this.pagelist.length;
+        //   let currentPage = currentLocation.start.location;
+        //   if (currentPage && currentPage > 0) {
+        //     this.setPaginate(currentPage + ' / ' + totalPage);
+        //   } else {
+        //     this.setPaginate('');
+        //   }
+        // } else {
+        //   this.setPaginate('');
+        // }
       }
     },
     display(target, callBack) {

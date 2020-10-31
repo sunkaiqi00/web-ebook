@@ -41,24 +41,6 @@
 import { ebookMixin } from '@/utils/mixin'
 export default {
   mixins: [ebookMixin],
-  computed: {
-    getSectionName() {
-      // if (this.section) {
-      //   let sectionInfo = this.currentBook.section(this.section)
-      //   {
-      //     if (
-      //       sectionInfo &&
-      //       sectionInfo.href &&
-      //       this.currentBook &&
-      //       this.currentBook.navigation
-      //     ) {
-      //       return this.currentBook.navigation.get(sectionInfo.href).label
-      //     }
-      //   }
-      // }
-      return this.section ? this.navigation[this.section].label : ''
-    },
-  },
   methods: {
     onProgressChange(progress) {
       // 进度条百分比 页面的切换随着 拖动进度条一起切换

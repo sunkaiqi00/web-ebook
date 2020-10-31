@@ -17,15 +17,15 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
-import Scroll from '../common/scroll'
+<script>
+import scroll from '../common/scroll'
 import { getBookmark } from '@/utils/localStorage'
 import { ebookMixin } from '@/utils/mixin'
 
 export default {
   mixins: [ebookMixin],
   components: {
-    Scroll,
+    scroll,
   },
   data() {
     return {
