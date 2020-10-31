@@ -33,7 +33,7 @@ export default {
         e.target.scrollTop || window.pageYOffset || document.body.scrollTop
       this.$emit('onScroll', offsetY)
     },
-    scrollTo(x, y) {
+    scroll(x, y) {
       this.$refs.scrollWrapper.scrollTo(x, y)
     },
     refresh() {
