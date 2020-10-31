@@ -63,7 +63,7 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
-  z-index: 150;
+  z-index: 166;
   width: 100%;
   background: #fff;
   box-shadow: 0 px2rem(-4) px2rem(6) rgba(0, 0, 0, 0.15);

@@ -1,7 +1,8 @@
 <template>
   <!-- 动态路由组件 -->
-  <div class="ebook-render">
+  <div class="ebook-reader">
     <div id="read"></div>
+    <div class="ebook-reader-mask" @click="onMaskClick" @touchmove="move" @touchend="moveEnd"></div>
   </div>
 </template>
 <script>
@@ -23,6 +24,32 @@ import { flatten } from '@/utils/book'
 export default {
   mixins: [ebookMixin],
   methods: {
+    move(e) {
+      let offsetY = 0
+      if (this.firstOffsetY) {
+        offsetY = e.changedTouches[0].clientY - this.firstOffsetY
+        this.setOffsetY(offsetY)
+      } else {
+        this.firstOffsetY = e.changedTouches[0].clientY
+      }
+      e.preventDefault()
+      e.stopPropagation()
+    },
+    moveEnd(e) {
+      this.setOffsetY(0)
+      this.firstOffsetY = null
+    },
+    onMaskClick(e) {
+      let offsetX = e.offsetX
+      let width = window.innerWidth
+      if (offsetX > 0 && offsetX < width * 0.3) {
+        this.prevPage()
+      } else if (offsetX > 0 && offsetX > width * 0.7) {
+        this.nextPage()
+      } else {
+        this.toggleTitleAndMenu()
+      }
+    },
     // 上一页
     prevPage() {
       if (this.rendition) {
@@ -221,5 +248,20 @@ export default {
   },
 }
 </script>
-<style scoped>
+<style scoped lang='scss'>
+@import '@/assets/styles/css/global';
+.ebook-reader {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  .ebook-reader-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: transparent;
+    z-index: 150;
+    width: 100%;
+    height: 100%;
+  }
+}
 </style>

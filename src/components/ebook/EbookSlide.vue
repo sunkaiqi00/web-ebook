@@ -32,6 +32,7 @@
 <script>
 import { ebookMixin } from '@/utils/mixin'
 import EbookSlideContent from './EbookSlideContent'
+import EbookSlideBookmarrk from './EbookSlideBookmark'
 import EbookLoading from './EbookLoading'
 export default {
   mixins: [ebookMixin],
@@ -42,7 +43,7 @@ export default {
     return {
       currentTab: 1,
       content: EbookSlideContent,
-      bookMark: null,
+      bookMark: EbookSlideBookmarrk,
     }
   },
   methods: {

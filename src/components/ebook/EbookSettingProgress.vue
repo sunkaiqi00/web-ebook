@@ -31,7 +31,7 @@
         </div>
         <div class="text-wrapper">
           <span class="progress-section-text">{{getSectionName}}</span>
-          <span>({{bookAvailable ? progress + '%' : '加载中...'}})</span>
+          <span class="progress-section-precentage">({{bookAvailable ? progress + '%' : '加载中...'}})</span>
         </div>
       </div>
     </div>
@@ -124,7 +124,7 @@ export default {
   left: 0;
   width: 100%;
   height: px2rem(90);
-  z-index: 101;
+  z-index: 165;
   background: white;
   box-shadow: 0 px2rem(-8) px2rem(8) rgba(0, 0, 0, 0.15);
   .setting-progress {
@@ -175,11 +175,17 @@ export default {
       width: 100%;
       color: #333;
       font-size: px2rem(12);
-      padding: 0 px2rem(20);
+      padding: 0 px2rem(25);
       box-sizing: border-box;
-      @include center;
+      display: flex;
       .progress-section-text {
+        flex: 5;
         @include ellipsis;
+        box-sizing: border-box;
+      }
+      .progress-section-precentage {
+        flex: 1;
+        @include right;
       }
     }
   }

@@ -1,6 +1,6 @@
 import { mapGetters, mapActions } from 'vuex';
 import { themeList, addCss, removeAllCss, getReadTimeToMinute } from '@/utils/book';
-import { saveLocation } from '@/utils/localStorage';
+import { saveLocation, getBookmark } from '@/utils/localStorage';
 export const ebookMixin = {
   computed: {
     ...mapGetters([
@@ -84,6 +84,17 @@ export const ebookMixin = {
         // 存储
         this.setSection(currentLocation.start.index);
         saveLocation(this.fileName, startCfi);
+        const bookmark = getBookmark(this.fileName);
+        // console.log(bookmark);
+        if (bookmark) {
+          if (bookmark.some(item => item.cfi === startCfi)) {
+            this.setIsBookmark(true);
+          } else {
+            this.setIsBookmark(false);
+          }
+        } else {
+          this.setIsBookmark(false);
+        }
       }
     },
     display(target, callBack) {
