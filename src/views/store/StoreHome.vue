@@ -1,7 +1,7 @@
 <template>
   <div class="store-home">
     <search-bar></search-bar>
-    <flap-card></flap-card>
+    <flap-card :data="random"></flap-card>
     <scroll :top="scrollTop" @onScroll="onScroll" ref="scroll">
       <div>kaihuai</div>
       <div>kaihuai</div>
@@ -49,11 +49,13 @@ import SearchBar from '@/components/home/SearchBar'
 import scroll from '@/components/common/scroll'
 import FlapCard from '@/components/home/FlapCard'
 import { storeHomeMixin } from '@/utils/mixin'
+import { home } from '@/api/store'
 export default {
   mixins: [storeHomeMixin],
   data() {
     return {
       scrollTop: 94,
+      random: null,
     }
   },
   components: {
@@ -72,6 +74,16 @@ export default {
       }
       this.$refs.scroll.refresh()
     },
+  },
+  mounted() {
+    home().then((res) => {
+      if (res && res.status === 200) {
+        let data = res.data
+        let randomIndex = Math.floor(Math.random() * data.random.length)
+        // console.log(data.random[randomIndex])
+        this.random = data.random[randomIndex]
+      }
+    })
   },
 }
 </script>

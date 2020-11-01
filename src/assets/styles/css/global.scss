@@ -41,6 +41,20 @@ $animationType: linear;
   justify-content: center;
   align-items: flex-start;
 }
+@mixin absCenter {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+}
+@mixin columnTop {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
 .icon {
   color: #666;
   font-size: px2rem(16);

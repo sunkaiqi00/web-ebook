@@ -6,7 +6,7 @@
           <div class="title-text-wrapper">
             <span class="title-text title">{{$t('home.title')}}</span>
           </div>
-          <div class="title-icon-shake-wrapper">
+          <div class="title-icon-shake-wrapper" @click="showFlapCard">
             <span class="icon-shake icon"></span>
           </div>
         </div>
@@ -67,6 +67,10 @@ export default {
     },
   },
   methods: {
+    // 点击 shark 按钮 随机推荐
+    showFlapCard() {
+      this.setFlapCardVisible(true)
+    },
     // 点击 < 返回 隐藏搜索页
     back() {
       if (this.offsetY > 0) {
