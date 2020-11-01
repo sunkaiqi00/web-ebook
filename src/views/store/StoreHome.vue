@@ -3,44 +3,23 @@
     <search-bar></search-bar>
     <flap-card :data="random"></flap-card>
     <scroll :top="scrollTop" @onScroll="onScroll" ref="scroll">
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
-      <div>kaihuai</div>
+      <div class="banner-wrapper">
+        <div class="banner-img" :style="{background:`url('${banner}')`}"></div>
+      </div>
+      <guess-you-like :data="guessYouLike"></guess-you-like>
+      <recommend :data="recommend" class="mt"></recommend>
+      <featured
+        class="mt"
+        :data="featured"
+        :titleText="$t('home.featured')"
+        :btnText="$t('home.seeAll')"
+      ></featured>
+      <div class="category-list-wrapper">
+        <div class="category-list-wrapper mt" v-for="(item,index) in categoryList" :key="index">
+          <category-book :data="item"></category-book>
+        </div>
+      </div>
+      <category class="mt" :data="categories"></category>
     </scroll>
   </div>
 </template>
@@ -48,6 +27,11 @@
 import SearchBar from '@/components/home/SearchBar'
 import scroll from '@/components/common/scroll'
 import FlapCard from '@/components/home/FlapCard'
+import GuessYouLike from '@/components/home/GuessYouLike'
+import Recommend from '@/components/home/Recommend'
+import Featured from '@/components/home/Featured'
+import CategoryBook from '@/components/home/CategoryBook'
+import Category from '@/components/home/Category'
 import { storeHomeMixin } from '@/utils/mixin'
 import { home } from '@/api/store'
 export default {
@@ -56,12 +40,23 @@ export default {
     return {
       scrollTop: 94,
       random: null,
+      banner: null, // 首页banner图片
+      guessYouLike: null, // 猜你喜欢数据
+      recommend: null, // 推荐
+      featured: null, // 精选
+      categoryList: null, // 列表
+      categories: null, // 所有分类
     }
   },
   components: {
     SearchBar,
     scroll,
     FlapCard,
+    GuessYouLike,
+    Recommend,
+    Featured,
+    CategoryBook,
+    Category,
   },
 
   methods: {
@@ -79,9 +74,15 @@ export default {
     home().then((res) => {
       if (res && res.status === 200) {
         let data = res.data
+        // console.log(data)
         let randomIndex = Math.floor(Math.random() * data.random.length)
-        // console.log(data.random[randomIndex])
         this.random = data.random[randomIndex]
+        this.banner = data.banner
+        this.guessYouLike = data.guessYouLike
+        this.recommend = data.recommend
+        this.featured = data.featured
+        this.categoryList = data.categoryList
+        this.categories = data.categories
       }
     })
   },
@@ -92,5 +93,19 @@ export default {
 .store-home {
   width: 100%;
   height: 100%;
+  .banner-wrapper {
+    width: 100%;
+    padding: px2rem(10);
+    box-sizing: border-box;
+    .banner-img {
+      width: 100%;
+      height: px2rem(150);
+      background-repeat: no-repeat !important;
+      background-size: 100% 100% !important;
+    }
+  }
+  .mt {
+    margin-top: px2rem(20);
+  }
 }
 </style>

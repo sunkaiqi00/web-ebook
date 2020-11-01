@@ -1,3 +1,11 @@
+$color-green: rgb(59, 201, 22);
+$color-pink: rgb(255, 102, 159);
+$color-blue: rgb(74, 171, 255);
+$color-yellow: rgb(255, 198, 102);
+$color-green-transparent: rgba(59, 201, 22, 0.5);
+$color-pink-transparent: rgba(255, 102, 159, 0.5);
+$color-blue-transparent: rgba(74, 171, 255, 0.5);
+$color-yellow-transparent: rgba(255, 198, 102, 0.5);
 // 设置rem 自适应
 $ratio: 375 / 10;
 @function px2rem($px) {
@@ -53,6 +61,17 @@ $animationType: linear;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
+}
+@mixin top {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+@mixin columnCenter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
 .icon {
