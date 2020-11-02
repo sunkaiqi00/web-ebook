@@ -24,6 +24,7 @@
             :placeholder="$t('home.hint')"
             v-model="searchText"
             @click="showHotSearch"
+            @keyup.enter="search"
           />
         </div>
       </div>
@@ -67,6 +68,18 @@ export default {
     },
   },
   methods: {
+    // 搜索
+    search() {
+      if (!this.searchText) {
+        return
+      }
+      this.$router.push({
+        path: '/store/list',
+        query: {
+          keyword: this.searchText,
+        },
+      })
+    },
     // 点击 shark 按钮 随机推荐
     showFlapCard() {
       this.setFlapCardVisible(true)
