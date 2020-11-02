@@ -169,3 +169,28 @@ export const storeHomeMixin = {
     }
   }
 };
+
+export const storeShelfMixin = {
+  computed: {
+    ...mapGetters(['isEditMode', 'shelfList', 'shelfSelected', 'shelfTitleVisible', 'offsetY'])
+  },
+  methods: {
+    ...mapActions([
+      'setIsEditMode',
+      'setShelfList',
+      'setShelfSelected',
+      'setShelfTitleVisible',
+      'setOffsetY'
+    ]),
+    // 书架 点击跳转到详情页
+    showBookDetail(book) {
+      this.$router.push({
+        path: '/store/detail',
+        query: {
+          fileName: book.fileName,
+          category: book.categoryText
+        }
+      });
+    }
+  }
+};

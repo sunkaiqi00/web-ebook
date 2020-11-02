@@ -177,3 +177,15 @@ export const categoryList = {
   Psychology: 21,
   Statistics: 22
 };
+
+export function appendAddToShelf(list) {
+  list.push({
+    id: -1,
+    type: 3
+  });
+  return list;
+}
+
+export function removeAddToShelf(list) {
+  return list.filter(item => item.type !== 3);
+}

@@ -55,6 +55,7 @@
 .hot-search-move-leave-to {
   transform: translate3d(0, px2rem(30), 0);
 }
+
 .slide-down-enter-active,
 .slide-down-leave-active,
 .slide-up-enter-active,
@@ -69,5 +70,5 @@
 .title-move-leave-active,
 .hot-search-move-enter-active,
 .hot-search-move-leave-active {
-  transition: all 0.2s linear;
+  transition: all $animationTime linear;
 }

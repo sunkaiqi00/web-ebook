@@ -4,7 +4,7 @@ import router from './router';
 import store from './store';
 import i18n from './lang';
 // import './mock';
-
+import './utils/boost';
 import '@/assets/styles/css/index.scss';
 import '@/assets/styles/css/home.scss';
 

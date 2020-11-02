@@ -6,6 +6,7 @@ $color-green-transparent: rgba(59, 201, 22, 0.5);
 $color-pink-transparent: rgba(255, 102, 159, 0.5);
 $color-blue-transparent: rgba(74, 171, 255, 0.5);
 $color-yellow-transparent: rgba(255, 198, 102, 0.5);
+$animationTime: 0.2s;
 // 设置rem 自适应
 $ratio: 375 / 10;
 @function px2rem($px) {
