@@ -1,6 +1,8 @@
 import { mapGetters, mapActions } from 'vuex';
 import { themeList, addCss, removeAllCss, getReadTimeToMinute } from '@/utils/book';
-import { saveLocation, getBookmark } from '@/utils/localStorage';
+import { saveLocation, getBookmark, getBookShelf, saveBookShelf } from '@/utils/localStorage';
+import { shelf } from '@/api/store';
+import { appendAddToShelf } from '@/utils/store';
 export const ebookMixin = {
   computed: {
     ...mapGetters([
@@ -172,7 +174,15 @@ export const storeHomeMixin = {
 
 export const storeShelfMixin = {
   computed: {
-    ...mapGetters(['isEditMode', 'shelfList', 'shelfSelected', 'shelfTitleVisible', 'offsetY'])
+    ...mapGetters([
+      'isEditMode',
+      'shelfList',
+      'shelfSelected',
+      'shelfTitleVisible',
+      'offsetY',
+      'shelfCategory',
+      'currentType'
+    ])
   },
   methods: {
     ...mapActions([
@@ -180,7 +190,9 @@ export const storeShelfMixin = {
       'setShelfList',
       'setShelfSelected',
       'setShelfTitleVisible',
-      'setOffsetY'
+      'setOffsetY',
+      'setShelfCategory',
+      'setCurrentType'
     ]),
     // 书架 点击跳转到详情页
     showBookDetail(book) {
@@ -190,6 +202,30 @@ export const storeShelfMixin = {
           fileName: book.fileName,
           category: book.categoryText
         }
+      });
+    },
+    // 获取书架电子书
+    getShelfList() {
+      let shelfList = getBookShelf();
+      if (!shelfList) {
+        shelf().then(res => {
+          if (res.status === 200 && res.data && res.data.bookList) {
+            shelfList = appendAddToShelf(res.data.bookList);
+            saveBookShelf(shelfList);
+            return this.setShelfList(shelfList);
+          }
+        });
+      } else {
+        return this.setShelfList(shelfList);
+      }
+    },
+    // 获取分类书  currentType=2
+    getCategoryfList(title) {
+      this.getShelfList().then(() => {
+        let categoryList = this.shelfList.filter(book => {
+          return book.type === 2 && book.title === title;
+        })[0];
+        this.setShelfCategory(categoryList);
       });
     }
   }

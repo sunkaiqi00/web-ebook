@@ -53,6 +53,12 @@ export default {
         if (this.data.type === 1) {
           this.showBookDetail(this.data)
         } else if (this.data.type === 2) {
+          this.$router.push({
+            path: '/store/category',
+            query: {
+              title: this.data.title,
+            },
+          })
         } else {
           this.$router.push('/store/home')
         }
@@ -67,6 +73,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
+  background: #fff;
   &.item-shadow {
     box-shadow: 0 0 px2rem(10) rgba(0, 0, 0, 0.3);
   }

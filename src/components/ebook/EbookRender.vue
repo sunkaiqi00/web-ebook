@@ -29,6 +29,7 @@ import {
   getLocation,
 } from '@/utils/localStorage'
 import { flatten } from '@/utils/book'
+import { getLocalForage } from '@/utils/localForage'
 export default {
   mixins: [ebookMixin],
   methods: {
@@ -261,11 +262,7 @@ export default {
         })
       })
     },
-    initEpub() {
-      // 拼接路径 访问 nginx 静态资源
-      const url =
-        process.env.VUE_APP_RES_URL + '/epub/' + this.fileName + '.epub'
-      // console.log(url)
+    initEpub(url) {
       // 1. 通过url 生成Book对象
       this.book = new Epub(url)
       this.setCurrentBook(this.book)
@@ -311,17 +308,34 @@ export default {
     },
   },
   mounted() {
+    let books = this.$route.params.fileName.split('|')
+    let fileName = books[1]
+    getLocalForage(fileName, (err, blob) => {
+      if (!err && blob) {
+        console.log('找到缓存电子书')
+        this.setFileName(books.join('/')).then(() => {
+          this.initEpub(blob)
+        })
+      } else {
+        console.log('在线获取电子书')
+        // 异步修改 vuex中book模块保存的电子书的分类和书名
+        this.setFileName(books.join('/'))
+          .then(() => {
+            // 拼接路径 访问 nginx 静态资源
+            const url =
+              process.env.VUE_APP_RES_URL + '/epub/' + this.fileName + '.epub'
+            // console.log(url)
+            this.initEpub(url)
+          })
+          .catch((err) => {
+            throw new Error(err)
+          })
+      }
+    })
+    // <----------------------------------------------->
     // 通过路由参数 动态获取访问电子书的分类和书名
-    const bookUrl = this.$route.params.fileName.split('|').join('/')
+    // const bookUrl = this.$route.params.fileName.split('|').join('/')
     // console.log(bookUrl)
-    // 异步修改 vuex中book模块保存的电子书的分类和书名
-    this.setFileName(bookUrl)
-      .then(() => {
-        this.initEpub()
-      })
-      .catch((err) => {
-        throw new Error(err)
-      })
   },
 }
 </script>

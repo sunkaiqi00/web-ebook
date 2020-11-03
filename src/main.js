@@ -5,6 +5,7 @@ import store from './store';
 import i18n from './lang';
 // import './mock';
 import './utils/boost';
+import './utils/create-api';
 import '@/assets/styles/css/index.scss';
 import '@/assets/styles/css/home.scss';
 

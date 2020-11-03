@@ -6,10 +6,10 @@
       v-show="shelfTitleVisible"
     >
       <div class="shelf-title-text-wrapper">
-        <span class="shelf-title-text">{{$t('shelf.title')}}</span>
+        <span class="shelf-title-text">{{title}}</span>
         <span class="shelf-title-sub-text" v-show="isEditMode">{{selectedText}}</span>
       </div>
-      <div class="shelf-title-btn-wrapper shelf-left" @click="clearCache">
+      <div class="shelf-title-btn-wrapper shelf-left" @click="clearCache" v-show="!isShowBack">
         <span class="shelf-title-btn-text">{{$t('shelf.clearCache')}}</span>
       </div>
       <div class="shelf-title-btn-wrapper shelf-right">
@@ -18,13 +18,25 @@
           @click="onEditClick"
         >{{isEditMode ? $t('shelf.cancel') : $t('shelf.edit')}}</span>
       </div>
+      <div class="shelf-title-btn-wrapper shelf-left" @click="back" v-show="isShowBack">
+        <span class="icon-back"></span>
+      </div>
     </div>
   </transition>
 </template>
 <script>
 import { storeShelfMixin } from '@/utils/mixin'
+import { clearLocalStorage } from '@/utils/localStorage'
+import { clearLocalForage } from '@/utils/localForage'
 export default {
   mixins: [storeShelfMixin],
+  props: {
+    title: String,
+    isShowBack: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       // 隐藏阴影
@@ -52,19 +64,32 @@ export default {
     },
   },
   methods: {
+    back() {
+      this.$router.go(-1)
+    },
     // 取消编辑  存储选中书的数组清空 selected属性设置为false
     onEditClick() {
       if (!this.isEditMode) {
         this.setShelfSelected([])
         this.shelfList.forEach((item) => {
           item.selected = false
+          if (item.itemList) {
+            item.itemList.forEach((item) => (item.selected = false))
+          }
         })
       }
       this.setIsEditMode(!this.isEditMode)
     },
     // 清除缓存
     clearCache() {
-      console.log('clearCache')
+      // local storage缓存
+      clearLocalStorage()
+      // indexdb 缓存
+      clearLocalForage()
+      this.setShelfList([])
+      this.setShelfSelected([])
+      this.getShelfList() // mixin 方法
+      this.simpleToast(this.$t('shelf.clearCacheSuccess'))
     },
   },
 }
@@ -106,6 +131,10 @@ export default {
     height: 100%;
     box-sizing: border-box;
     @include center;
+    .icon-back {
+      font-size: px2rem(20);
+      color: #666;
+    }
     .shelf-title-btn-text {
       font-size: px2rem(14);
       color: #666;

@@ -1,25 +1,24 @@
 <template>
   <div class="store-shelf">
-    <shelf-title :title="$t('shelf.title')"></shelf-title>
+    <shelf-title :title="shelfCategory.title" :isShowBack="true"></shelf-title>
     <scroll
       class="shelf-scroll-wrapper"
       :top="0"
       :bottom="scrollBottom"
       ref="scroll"
       @onScroll="onScroll"
+      v-if="isShowList"
     >
-      <shelf-search></shelf-search>
-      <shelf-list :data="shelfList"></shelf-list>
+      <shelf-list :top="42" :data="shelfCategory.itemList"></shelf-list>
     </scroll>
+    <div class="store-shelf-empty-view" v-else>{{$t('shelf.groupNone')}}</div>
     <shelf-footer></shelf-footer>
   </div>
 </template>
 <script>
 import { storeShelfMixin } from '@/utils/mixin'
-
 import ShelfTitle from '../../components/shelf/ShelfTitle'
 import scroll from '@/components/common/scroll'
-import ShelfSearch from '@/components/shelf/ShelfSearch'
 import ShelfList from '@/components/shelf/ShelfList'
 import ShelfFooter from '@/components/shelf/ShelfFooter'
 export default {
@@ -42,9 +41,15 @@ export default {
   components: {
     ShelfTitle,
     scroll,
-    ShelfSearch,
     ShelfList,
     ShelfFooter,
+  },
+  computed: {
+    isShowList() {
+      return (
+        this.shelfCategory.itemList && this.shelfCategory.itemList.length > 0
+      )
+    },
   },
   methods: {
     onScroll(offsetY) {
@@ -52,10 +57,8 @@ export default {
     },
   },
   mounted() {
-    // 获取书
-    this.getShelfList()
-    this.setShelfCategory([])
-    this.setCurrentType(1)
+    this.getCategoryfList(this.$route.query.title)
+    this.setCurrentType(2)
   },
 }
 </script>
@@ -72,6 +75,16 @@ export default {
     top: 0;
     left: 0;
     z-index: 110;
+  }
+  .store-shelf-empty-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: px2rem(14);
+    color: #333;
+    @include center;
   }
 }
 </style>
