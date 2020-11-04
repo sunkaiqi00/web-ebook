@@ -189,3 +189,15 @@ export function appendAddToShelf(list) {
 export function removeAddToShelf(list) {
   return list.filter(item => item.type !== 3);
 }
+
+export function computedId(list) {
+  return list.map((book, index) => {
+    if (book.type !== 3) {
+      book.id = index + 1;
+      if (book.itemList) {
+        book.itemList = computedId(book.itemList);
+      }
+    }
+    return book;
+  });
+}

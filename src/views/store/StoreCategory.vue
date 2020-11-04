@@ -1,6 +1,6 @@
 <template>
   <div class="store-shelf">
-    <shelf-title :title="shelfCategory.title" :isShowBack="true"></shelf-title>
+    <shelf-title :title="shelfCategory.title"></shelf-title>
     <scroll
       class="shelf-scroll-wrapper"
       :top="0"
@@ -34,7 +34,9 @@ export default {
       // 编辑模式 书架底部书的信息需要展示完整 传递bottom 重新计算scroll的高度
       this.scrollBottom = isEditMode ? 48 : 0
       this.$nextTick(() => {
-        this.$refs.scroll.refresh()
+        if (this.$refs.scroll) {
+          this.$refs.scroll.refresh()
+        }
       })
     },
   },

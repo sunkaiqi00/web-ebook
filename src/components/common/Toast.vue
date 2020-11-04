@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="toast-bg-wrapper" v-if="visible" @click.prevent>
+    <div class="toast-bg-wrapper" v-if="visible" @click.prevent ref="toast">
       <div class="toast-bg">
         <div class="toast-wrapper">
           <div class="toast" v-html="showText"></div>

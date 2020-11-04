@@ -2,7 +2,7 @@ import { mapGetters, mapActions } from 'vuex';
 import { themeList, addCss, removeAllCss, getReadTimeToMinute } from '@/utils/book';
 import { saveLocation, getBookmark, getBookShelf, saveBookShelf } from '@/utils/localStorage';
 import { shelf } from '@/api/store';
-import { appendAddToShelf } from '@/utils/store';
+import { appendAddToShelf, computedId, removeAddToShelf } from '@/utils/store';
 export const ebookMixin = {
   computed: {
     ...mapGetters([
@@ -226,6 +226,48 @@ export const storeShelfMixin = {
           return book.type === 2 && book.title === title;
         })[0];
         this.setShelfCategory(categoryList);
+      });
+    },
+    // 移除分组
+    // moveOutOfGroup(cb) {
+    //   this.setShelfList(
+    //     this.shelfList.map(book => {
+    //       if (book.type === 2 && book.itemList) {
+    //         book.itemList = book.itemList.filter(subBook => !subBook.selected);
+    //       }
+    //       return book;
+    //     })
+    //   ).then(() => {
+    //     let list = removeAddToShelf(this.shelfList);
+    //     list = [].concat(list, ...this.shelfSelected);
+    //     list = appendAddToShelf(list);
+    //     list = computedId(list);
+    //     this.setShelfList(list).then(() => {
+    //       this.simpleToast(this.$t('shelf.moveBookOutSuccess'));
+    //       if (cb) cb();
+    //     });
+    //   });
+    // }
+    moveOutOfGroup(f) {
+      this.setShelfList(
+        this.shelfList.map(book => {
+          if (book.type === 2 && book.itemList) {
+            book.itemList = book.itemList.filter(subBook => !subBook.selected);
+          }
+          return book;
+        })
+      ).then(() => {
+        const list = computedId(
+          appendAddToShelf([].concat(removeAddToShelf(this.shelfList), ...this.shelfSelected))
+        );
+        this.setShelfList(list).then(() => {
+          this.simpleToast(this.$t('shelf.moveBookOutSuccess'));
+          if (f) f();
+          // tosat 删除分组 bug
+          setTimeout(() => {
+            this.$router.go(0);
+          }, 1000);
+        });
       });
     }
   }
