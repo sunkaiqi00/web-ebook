@@ -40,7 +40,7 @@ export default {
     return {
       scrollTop: 94,
       random: null,
-      banner: null, // 首页banner图片
+      banner: '', // 首页banner图片
       guessYouLike: null, // 猜你喜欢数据
       recommend: null, // 推荐
       featured: null, // 精选

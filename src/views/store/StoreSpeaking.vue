@@ -232,7 +232,7 @@ export default {
       const xmlDoc = xmlhttp.responseText
       if (xmlDoc) {
         const json = JSON.parse(xmlDoc)
-        console.log(json)
+        // console.log(json)
         if (json.path) {
           this.$refs.audio.src = json.path
           this.continuePlay()

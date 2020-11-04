@@ -76,12 +76,15 @@ import Scroll from '@/components/common/scroll'
 import Toast from '@/components/common/Toast'
 import { detail } from '@/api/store'
 import { px2rem, realPx } from '@/utils/utils'
-import Epub from 'epubjs'
 import { getLocalForage } from '@/utils/localForage'
-
+import { removeFromBookShelf, addToShelf } from '@/utils/store'
+import { storeShelfMixin } from '@/utils/mixin'
+import { getBookShelf, saveBookShelf } from '@/utils/localStorage'
+import Epub from 'epubjs'
 global.ePub = Epub
 
 export default {
+  mixins: [storeShelfMixin],
   components: {
     DetailTitle,
     Scroll,
@@ -125,12 +128,12 @@ export default {
       return this.metadata ? this.metadata.creator : ''
     },
     inBookShelf() {
-      if (this.bookItem && this.bookShelf) {
+      if (this.bookItem && this.shelfList) {
         const flatShelf = (function flatten(arr) {
           return [].concat(
             ...arr.map((v) => (v.itemList ? [v, ...flatten(v.itemList)] : v))
           )
-        })(this.bookShelf).filter((item) => item.type === 1)
+        })(this.shelfList).filter((item) => item.type === 1)
         const book = flatShelf.filter(
           (item) => item.fileName === this.bookItem.fileName
         )
@@ -159,7 +162,17 @@ export default {
     }
   },
   methods: {
-    addOrRemoveShelf() {},
+    addOrRemoveShelf() {
+      if (this.inBookShelf) {
+        let shelflist = removeFromBookShelf(this.bookItem)
+        this.setShelfList(shelflist).then(() => {
+          saveBookShelf(this.shelfList)
+        })
+      } else {
+        addToShelf(this.bookItem)
+        this.setShelfList(getBookShelf())
+      }
+    },
     showToast(text) {
       this.toastText = text
       this.$refs.toast.show()
@@ -293,6 +306,9 @@ export default {
   },
   mounted() {
     this.init()
+    if (!this.shelfList || this.shelfList.length === 0) {
+      this.getShelfList()
+    }
   },
 }
 </script>

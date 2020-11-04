@@ -121,14 +121,14 @@ export default {
     clear() {
       this.newGroupName = ''
     },
-    // 移入分组
+    // 移动到其他分组
     moveToGroup(group) {
       this.setShelfList(
         this.shelfList.filter((book) => {
           if (book.itemList) {
-            book.itemList.filter(
-              (subBook) => this.shelfSelected.indexOf(subBook) < 0
-            )
+            book.itemList = book.itemList.filter((subBook) => {
+              return this.shelfSelected.indexOf(subBook) < 0
+            })
           }
           return this.shelfSelected.indexOf(book) < 0
         })
@@ -146,7 +146,7 @@ export default {
       })
     },
     // 移除分组
-    moveOutFromGroup() {
+    moveOutFromGroup(item) {
       this.setShelfList(
         this.shelfList.map((book) => {
           if (book.type === 2 && book.itemList) {

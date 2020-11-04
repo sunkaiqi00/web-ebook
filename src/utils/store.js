@@ -1,5 +1,4 @@
-import { getLocalStorage } from './localStorage';
-
+import { getLocalStorage, getBookShelf, saveBookShelf } from './localStorage';
 export function flatBookList(bookList) {
   if (bookList) {
     let orgBookList = bookList.filter(item => {
@@ -225,6 +224,7 @@ export function removeAddToShelf(list) {
   return list.filter(item => item.type !== 3);
 }
 
+// 重新计算id
 export function computedId(list) {
   return list.map((book, index) => {
     if (book.type !== 3) {
@@ -235,4 +235,32 @@ export function computedId(list) {
     }
     return book;
   });
+}
+// 移除书架  detail详情页
+export function removeFromBookShelf(book) {
+  let shelfList = getBookShelf();
+  shelfList = shelfList.filter(item => {
+    if (item.itemList) {
+      item.itemList = item.itemList.filter(item => {
+        return item.fileName !== book.fileName;
+      });
+    }
+    return item.fileName !== book.fileName;
+  });
+  return shelfList;
+  // return getBookShelf().filter(item => {
+  //   if (item.itemList) {
+  //     item.itemList = removeFromBookShelf(item.itemList);
+  //   }
+  //   return item.fileName !== book.fileName;
+  // });
+}
+// 加入书架
+export function addToShelf(book) {
+  let shelfList = getBookShelf();
+  shelfList = removeAddToShelf(shelfList);
+  book.type = 1;
+  shelfList.push(book);
+  shelfList = appendAddToShelf(shelfList);
+  saveBookShelf(shelfList);
 }

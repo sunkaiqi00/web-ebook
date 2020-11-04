@@ -6,7 +6,7 @@
         <div class="icon-back" @click="back"></div>
       </div>
       <div class="right">
-        <div class="icon-wrapper">
+        <div class="icon-wrapper" @click="goShelf">
           <div class="icon-shelf"></div>
         </div>
         <div class="icon-wrapper">
@@ -26,6 +26,9 @@ export default {
   methods: {
     back() {
       this.$router.go(-1)
+    },
+    goShelf() {
+      this.$router.push('/store/shelf')
     },
   },
 }

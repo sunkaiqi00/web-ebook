@@ -190,16 +190,16 @@ export default {
         Promise.all([
           contents.addStylesheet(
             // 环境变量
-            `${process.env.VUE_APP_RES_URL}/webfonts/daysOne.css`
+            `${process.env.VUE_APP_RES_URL}/fonts/daysOne.css`
           ),
           contents.addStylesheet(
-            `${process.env.VUE_APP_RES_URL}/webfonts/cabin.css`
+            `${process.env.VUE_APP_RES_URL}/fonts/cabin.css`
           ),
           contents.addStylesheet(
-            `${process.env.VUE_APP_RES_URL}/webfonts/montserrat.css`
+            `${process.env.VUE_APP_RES_URL}/fonts/montserrat.css`
           ),
           contents.addStylesheet(
-            `${process.env.VUE_APP_RES_URL}/webfonts/tangerine.css`
+            `${process.env.VUE_APP_RES_URL}/fonts/tangerine.css`
           ),
         ]).then(() => {
           // console.log('字体加载完毕...')
@@ -284,7 +284,7 @@ export default {
           //   let loc = item.match(/\[(.*)\]!/)[1]
           //   this.navigation.forEach((nav) => {
           //     if (nav.href) {
-          //       let href = nav.href.match(/^(.*)\.html$/)[1]
+          //       let href = nav.href.match(/^(.*)\.x?html$/)[1]
           //       if (href === loc) {
           //         nav.pageList.push(item)
           //       }
@@ -312,18 +312,18 @@ export default {
     let fileName = books[1]
     getLocalForage(fileName, (err, blob) => {
       if (!err && blob) {
-        console.log('找到缓存电子书')
+        // console.log('找到缓存电子书')
         this.setFileName(books.join('/')).then(() => {
           this.initEpub(blob)
         })
       } else {
-        console.log('在线获取电子书')
+        // console.log('在线获取电子书')
         // 异步修改 vuex中book模块保存的电子书的分类和书名
         this.setFileName(books.join('/'))
           .then(() => {
             // 拼接路径 访问 nginx 静态资源
             const url =
-              process.env.VUE_APP_RES_URL + '/epub/' + this.fileName + '.epub'
+              process.env.VUE_APP_EPUB_URL + '/' + this.fileName + '.epub'
             // console.log(url)
             this.initEpub(url)
           })

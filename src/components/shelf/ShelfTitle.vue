@@ -106,12 +106,15 @@ export default {
     },
     onComplete() {
       this.hidePopup()
-      // 书架列表中删除 删选id不等于当前分类的id
+      // 书架列表中删除 删除书列表中的当前分类列表
       this.setShelfList(
         this.shelfList.filter((book) => book.id !== this.shelfCategory.id)
       ).then(() => {
         saveBookShelf(this.shelfList)
-        this.$router.go(-1)
+        this.setShelfList(this.shelfList)
+        setTimeout(() => {
+          this.$router.go(-1)
+        }, 500)
         this.setIsEditMode(false)
       })
     },

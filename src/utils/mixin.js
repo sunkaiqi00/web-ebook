@@ -261,12 +261,12 @@ export const storeShelfMixin = {
           appendAddToShelf([].concat(removeAddToShelf(this.shelfList), ...this.shelfSelected))
         );
         this.setShelfList(list).then(() => {
-          this.simpleToast(this.$t('shelf.moveBookOutSuccess'));
+          this.simpleToast(this.$t('shelf.deleteGroup') + '成功');
           if (f) f();
-          // tosat 删除分组 bug
+          // 删除分组 bug toast不隐藏
           setTimeout(() => {
             this.$router.go(0);
-          }, 1000);
+          }, 600);
         });
       });
     }

@@ -107,7 +107,7 @@ export default {
       this.setIsEditMode(false)
       saveBookShelf(this.shelfList)
     },
-    // 移除 popup框
+    // 移除书架 popup框
     showRemove() {
       // 选中一本书与多本书 title需要改变
       let title
