@@ -77,6 +77,7 @@ import Toast from '@/components/common/Toast'
 import { detail } from '@/api/store'
 import { px2rem, realPx } from '@/utils/utils'
 import Epub from 'epubjs'
+import { getLocalForage } from '@/utils/localForage'
 
 global.ePub = Epub
 
@@ -168,7 +169,26 @@ export default {
         path: `/ebook/${this.categoryText}|${this.fileName}`,
       })
     },
-    trialListening() {},
+    trialListening() {
+      getLocalForage(this.bookItem.fileName, (err, blob) => {
+        if (!err && blob && blob instanceof Blob) {
+          this.$router.push({
+            path: '/store/speaking',
+            query: {
+              fileName: this.bookItem.fileName,
+            },
+          })
+        } else {
+          this.$router.push({
+            path: '/store/speaking',
+            query: {
+              fileName: this.bookItem.fileName,
+              opf: this.opf,
+            },
+          })
+        }
+      })
+    },
     read(item) {
       this.$router.push({
         path: `/ebook/${this.categoryText}|${this.fileName}`,
