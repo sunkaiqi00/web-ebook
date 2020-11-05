@@ -9,6 +9,10 @@ import './utils/create-api';
 import '@/assets/styles/css/index.scss';
 import '@/assets/styles/css/home.scss';
 
+import VueLazyload from 'vue-lazyload';
+Vue.use(VueLazyload, {
+  error: '@/assets/img/error.png'
+});
 Vue.config.productionTip = false;
 
 new Vue({

@@ -10,7 +10,7 @@
           @click="showBookDetail(item)"
         >
           <div class="img-wrapper">
-            <img class="img" :src="item.cover" />
+            <img class="img" v-lazy="item.cover" />
           </div>
           <div class="content-wrapper">
             <div class="title title-small" ref="title">{{item.title}}</div>
