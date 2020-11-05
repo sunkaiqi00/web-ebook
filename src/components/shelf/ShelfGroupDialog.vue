@@ -147,6 +147,7 @@ export default {
     },
     // 移除分组
     moveOutFromGroup(item) {
+      console.log('aaa')
       this.setShelfList(
         this.shelfList.map((book) => {
           if (book.type === 2 && book.itemList) {

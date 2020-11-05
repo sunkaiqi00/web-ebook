@@ -9,7 +9,9 @@
       @onScroll="onScroll"
       v-if="isShowList"
     >
-      <shelf-list :top="42" :data="shelfCategory.itemList"></shelf-list>
+      <keep-alive>
+        <shelf-list :top="42" :data="shelfCategory.itemList"></shelf-list>
+      </keep-alive>
     </scroll>
     <div class="store-shelf-empty-view" v-else>{{$t('shelf.groupNone')}}</div>
     <shelf-footer></shelf-footer>
@@ -72,6 +74,9 @@ export default {
   height: 100%;
   background: #fff;
   z-index: 100;
+  min-width: 200px;
+  max-width: 640px;
+  margin: 0 auto;
   .shelf-scroll-wrapper {
     position: absolute;
     top: 0;

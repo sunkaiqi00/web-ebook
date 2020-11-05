@@ -1,13 +1,15 @@
 <template>
-  <div class="shelf-list" :style="{top: shelfListTop}">
-    <transition-group name="list" tag="div" id="shelf-list">
-      <div class="shelf-list-item-wrapper" v-for="item in data" :key="item.id">
-        <shelf-item :data="item" :style="{height:itemHeight}"></shelf-item>
-        <div class="shelf-list-title-wrapper">
-          <span class="shelf-list-title title-small">{{item.title}}</span>
+  <div class="shelf-list" :style="{top: shelfListTop}" ref="shelfList">
+    <keep-alive>
+      <transition-group name="list" tag="div" id="shelf-list">
+        <div class="shelf-list-item-wrapper" v-for="item in data" :key="item.id">
+          <shelf-item :data="item"></shelf-item>
+          <div class="shelf-list-title-wrapper">
+            <span class="shelf-list-title title-small">{{item.title}}</span>
+          </div>
         </div>
-      </div>
-    </transition-group>
+      </transition-group>
+    </keep-alive>
   </div>
 </template>
 <script>
@@ -15,6 +17,9 @@ import { storeShelfMixin } from '@/utils/mixin'
 import { realPx, px2rem } from '@/utils/utils'
 import ShelfItem from './ShelfItem'
 export default {
+  mounted() {
+    console.log(this.data)
+  },
   mixins: [storeShelfMixin],
   props: {
     top: {
@@ -31,11 +36,18 @@ export default {
     shelfListTop() {
       return px2rem(this.top) + 'rem'
     },
-    // 每个书 item的高度 图片为250*350(比例)  有四个30的padding
-    itemHeight() {
-      return ((window.innerWidth - realPx(120)) / 3 / 250) * 350 + 'px'
-    },
   },
+  // methods: {
+  // 每个书 item的高度 图片为250*350(比例)  有四个30的padding
+  //   itemHeight() {
+  //     if (this.$refs.shelfList) {
+  //       return (
+  //         ((this.$refs.shelfList.offsetWidth - realPx(120)) / 3 / 250) * 350 +
+  //         'px'
+  //       )
+  //     }
+  //   },
+  // },
 }
 </script>
 <style scoped lang='scss'>

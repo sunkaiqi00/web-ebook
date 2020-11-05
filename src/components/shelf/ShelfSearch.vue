@@ -2,6 +2,7 @@
   <div
     class="shelf-search-wrapper"
     :class="{'search-top' : ifInputClicked,'title-shadow' : ifHideTitleShadow}"
+    ref="searchWrapper"
   >
     <div class="shelf-search" :class="{'search-top' : ifInputClicked}">
       <div class="search-wrapper">
@@ -49,6 +50,7 @@
 <script>
 import { saveLocale } from '@/utils/localStorage'
 import { storeShelfMixin } from '@/utils/mixin'
+
 export default {
   mixins: [storeShelfMixin],
   data() {
@@ -115,11 +117,14 @@ export default {
       this.ifInputClicked = true
       // 隐藏书架标题 title
       this.setShelfTitleVisible(false)
+      this.$refs.searchWrapper.style.left = '50%'
+      this.$refs.searchWrapper.style.transform = 'translateX(-50%)'
     },
     // 点击取消
     onCancel() {
       this.ifInputClicked = false
       this.searchText = ''
+      this.mLeft = 0
       // 显示书架标题 title
       this.setShelfTitleVisible(true)
     },
@@ -136,6 +141,8 @@ export default {
   font-size: px2rem(16);
   background: #fff;
   box-shadow: 0 px2rem(2) px2rem(2) rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  max-width: 640px;
   &.search-top {
     position: fixed;
     left: 0;
@@ -159,8 +166,9 @@ export default {
     .search-wrapper {
       flex: 1;
       display: flex;
-      margin: px2rem(8) 0 px2rem(8) px2rem(8);
+      margin: px2rem(8) 0 px2rem(8) 0;
       border: px2rem(1) solid #ccc;
+      margin-left: px2rem(20);
       border-radius: px2rem(5);
       .icon-search-wrapper {
         flex: 0 0 px2rem(22);

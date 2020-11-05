@@ -1,5 +1,5 @@
 <template>
-  <div class="store-shelf">
+  <div class="store-shelf" ref="storeShelf">
     <shelf-title :title="$t('shelf.title')"></shelf-title>
     <scroll
       class="shelf-scroll-wrapper"
@@ -8,7 +8,7 @@
       ref="scroll"
       @onScroll="onScroll"
     >
-      <shelf-search></shelf-search>
+      <shelf-search ref="shelfSearchWrapper"></shelf-search>
       <shelf-list :data="shelfList"></shelf-list>
     </scroll>
     <shelf-footer></shelf-footer>
@@ -67,6 +67,9 @@ export default {
   height: 100%;
   background: #fff;
   z-index: 100;
+  min-width: 200px;
+  max-width: 640px;
+  margin: 0 auto;
   .shelf-scroll-wrapper {
     position: absolute;
     top: 0;

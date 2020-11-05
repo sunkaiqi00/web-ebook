@@ -51,7 +51,7 @@ export default {
 <style scoped lang='scss'>
 @import '@/assets/styles/css/global';
 .popup {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -60,12 +60,15 @@ export default {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
+  max-width: 640px;
+  min-width: 200px;
+  margin: auto;
   .popup-bg {
     width: 100%;
     height: 100%;
   }
   .popup-wrapper {
-    position: fixed;
+    position: absolute;
     left: 0;
     bottom: 0;
     z-index: 500;
@@ -73,13 +76,13 @@ export default {
     background: #fff;
     .popup-title {
       width: 100%;
-      height: px2rem(44);
+      padding: px2rem(20) 0;
       border-bottom: pz2rem(1) soli #eee;
       font-size: px2rem(12);
-      line-height: px2rem(14);
-      padding: px2rem(15);
+      line-height: px2rem(16);
       box-sizing: border-box;
       color: #999;
+      text-align: center;
       @include center;
     }
     .popup-btn {

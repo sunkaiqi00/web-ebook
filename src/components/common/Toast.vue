@@ -66,9 +66,10 @@ export default {
     position: absolute;
     top: 50%;
     left: 50%;
-    margin: 0 0 0 -50%;
+    transform: translate(-50%, -50%);
     z-index: 2500;
     width: 100%;
+    max-width: 500px;
     @include center;
     .toast-wrapper {
       width: 60%;

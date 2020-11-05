@@ -4,7 +4,9 @@
     :class="{'item-shadow' : data.type === 1 || data.type === 2}"
     @click="onItemClick"
   >
-    <component :is="item" :data="data" :class="{'is-edit' : isEditMode && data.type === 2}"></component>
+    <keep-alive>
+      <component :is="item" :data="data" :class="{'is-edit' : isEditMode && data.type === 2}"></component>
+    </keep-alive>
     <div
       :class="{'icon-selected' : data.type === 1,'is-selected' : data.selected}"
       v-show="isEditMode"
@@ -71,8 +73,10 @@ export default {
 @import '@/assets/styles/css/global';
 .shelf-item {
   position: relative;
-  width: 100%;
-  height: 100%;
+  // width: 100%;
+  width: px2rem(93);
+  // height: 100%;
+  height: px2rem(132);
   background: #fff;
   &.item-shadow {
     box-shadow: 0 0 px2rem(10) rgba(0, 0, 0, 0.3);

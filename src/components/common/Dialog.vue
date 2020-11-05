@@ -47,12 +47,15 @@ export default {
   top: 0;
   bottom: 0;
   right: 0;
+  margin: auto;
   z-index: 2000;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.2);
   font-size: px2rem(16);
   color: #333;
+  max-width: 640px;
+  min-width: 200px;
   @include center;
   .dialog-wrapper {
     position: relative;

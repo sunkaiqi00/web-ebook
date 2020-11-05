@@ -161,6 +161,7 @@ export default {
       opf: null,
     }
   },
+
   methods: {
     addOrRemoveShelf() {
       if (this.inBookShelf) {
@@ -318,7 +319,12 @@ export default {
 
 .book-detail {
   width: 100%;
+  height: 100%;
   background: white;
+  min-width: 200px;
+  max-width: 640px;
+  margin: 0 auto;
+  position: relative;
   .content-wrapper {
     width: 100%;
     .book-detail-content-wrapper {
@@ -389,12 +395,12 @@ export default {
     }
   }
   .bottom-wrapper {
-    position: fixed;
+    position: absolute;
+    width: 100%;
     bottom: 0;
     left: 0;
     z-index: 120;
     display: flex;
-    width: 100%;
     height: px2rem(52);
     box-shadow: 0 px2rem(-2) px2rem(2) rgba(0, 0, 0, 0.1);
     .bottom-btn {

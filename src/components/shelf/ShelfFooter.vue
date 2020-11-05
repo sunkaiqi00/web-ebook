@@ -145,10 +145,19 @@ export default {
     removeSelected() {
       // 遍历书列表移除移除选中列表中的书
       this.shelfSelected.forEach((selected) => {
-        this.setShelfList(this.shelfList.filter((book) => book !== selected))
+        this.setShelfList(
+          this.shelfList.filter((item) => {
+            if (item.itemList) {
+              item.itemList = item.itemList.filter((item) => {
+                return item.fileName !== selected.fileName
+              })
+            }
+            return item.fileName !== selected.fileName
+          })
+        )
+        this.setShelfSelected([])
+        this.onComplete()
       })
-      this.setShelfSelected([])
-      this.onComplete()
     },
     // 下载选中书
     async downloadSelectedBook() {
@@ -299,7 +308,7 @@ export default {
 <style scoped lang='scss'>
 @import '@/assets/styles/css/global';
 .shelf-footer {
-  position: fixed;
+  position: absolute;
   left: 0;
   bottom: 0;
   z-index: 120;
