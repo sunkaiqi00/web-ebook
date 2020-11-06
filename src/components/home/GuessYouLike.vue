@@ -39,7 +39,7 @@ export default {
       this.total = v.length / 3
     },
     index(index) {
-      console.log('index- ' + index)
+      // console.log('index- ' + index)
     },
     total(total) {},
   },
@@ -72,11 +72,11 @@ export default {
         this.index = 0
       } else {
         this.index++
-        console.log(
-          this.index,
-          this.index + this.total,
-          this.index + this.total * 2
-        )
+        // console.log(
+        //   this.index,
+        //   this.index + this.total,
+        //   this.index + this.total * 2
+        // )
       }
     },
     resultText(item) {

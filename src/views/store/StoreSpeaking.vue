@@ -86,6 +86,258 @@ import Epub from 'epubjs'
 
 global.ePub = Epub
 
+const APPID = '5fa4fbad'
+const API_SECRET = '15bfc02dc69fedd79a5ceb358b376c76'
+const API_KEY = '473e2fac657852ff176ad0920ad58f46'
+let isChrome = navigator.userAgent.toLowerCase().match(/chrome/)
+let notSupportTip = isChrome
+  ? '您的浏览器暂时不支持体验功能，请升级您的浏览器'
+  : '您现在使用的浏览器暂时不支持体验功能，<br />推荐使用谷歌浏览器Chrome'
+
+function getWebsocketUrl() {
+  return new Promise((resolve, reject) => {
+    var apiKey = API_KEY
+    var apiSecret = API_SECRET
+    var url = 'wss://tts-api.xfyun.cn/v2/tts'
+    var host = location.host
+    var date = new Date().toGMTString()
+    var algorithm = 'hmac-sha256'
+    var headers = 'host date request-line'
+    var signatureOrigin = `host: ${host}\ndate: ${date}\nGET /v2/tts HTTP/1.1`
+    var signatureSha = CryptoJS.HmacSHA256(signatureOrigin, apiSecret)
+    var signature = CryptoJS.enc.Base64.stringify(signatureSha)
+    var authorizationOrigin = `api_key="${apiKey}", algorithm="${algorithm}", headers="${headers}", signature="${signature}"`
+    var authorization = btoa(authorizationOrigin)
+    url = `${url}?authorization=${authorization}&date=${date}&host=${host}`
+    resolve(url)
+  })
+}
+
+let audioCtx
+let source
+let btnState = {
+  unTTS: '立即合成',
+  ttsing: '正在合成',
+  endTTS: '立即播放',
+  play: '停止播放',
+  pause: '继续播放',
+  endPlay: '重新播放',
+  errorTTS: '合成失败',
+}
+
+class Experience {
+  constructor({
+    speed = 50,
+    voice = 50,
+    pitch = 50,
+    text = '',
+    engineType = 'aisound',
+    voiceName = 'xiaoyan',
+    playBtn = '.js-base-play',
+    defaultText = '',
+  } = {}) {
+    this.speed = speed
+    this.voice = voice
+    this.pitch = pitch
+    this.text = text
+    this.defaultText = defaultText
+    this.engineType = engineType
+    this.voiceName = voiceName
+    this.playBtn = playBtn
+    this.playState = ''
+    this.audioDatas = []
+    this.pcmPlayWork = new Worker('./transform.worker.js')
+    this.pcmPlayWork.onmessage = (e) => {
+      this.onmessageWork(e)
+    }
+  }
+
+  setConfig({ speed, voice, pitch, text, defaultText, engineType, voiceName }) {
+    speed && (this.speed = speed)
+    voice && (this.voice = voice)
+    pitch && (this.pitch = pitch)
+    text && (this.text = text)
+    defaultText && (this.defaultText = defaultText)
+    engineType && (this.engineType = engineType)
+    voiceName && (this.voiceName = voiceName)
+    this.resetAudio()
+  }
+
+  onmessageWork(e) {
+    switch (e.data.command) {
+      case 'newAudioData': {
+        this.audioDatas.push(e.data.data)
+        if (this.playState === 'ttsing' && this.audioDatas.length === 1) {
+          this.playTimeout = setTimeout(() => {
+            this.audioPlay()
+          }, 1000)
+        }
+        break
+      }
+    }
+  }
+
+  setBtnState(state) {
+    let oldState = this.playState
+    this.playState = state
+  }
+
+  getAudio() {
+    this.setBtnState('ttsing')
+    getWebsocketUrl().then((url) => {
+      this.connectWebsocket(url)
+    })
+  }
+
+  connectWebsocket(url) {
+    if ('WebSocket' in window) {
+      this.websocket = new WebSocket(url)
+    } else if ('MozWebSocket' in window) {
+      this.websocket = new MozWebSocket(url)
+    } else {
+      alert(notSupportTip)
+      return
+    }
+    let self = this
+    this.websocket.onopen = (e) => {
+      var params = {
+        common: {
+          app_id: APPID, // APPID
+        },
+        business: {
+          ent: self.engineType,
+          aue: 'raw',
+          auf: 'audio/L16;rate=16000',
+          vcn: self.voiceName,
+          speed: self.speed,
+          volume: self.voice * 10,
+          pitch: self.pitch,
+          //'bgs': 1,
+          tte: 'UTF8',
+        },
+        data: {
+          status: 2,
+          text: Base64.encode(self.text || self.defaultText || DEFAULT_TEXT),
+        },
+      }
+      this.websocket.send(JSON.stringify(params))
+    }
+    this.websocket.onmessage = (e) => {
+      let jsonData = JSON.parse(e.data)
+      // 合成失败
+      if (jsonData.code !== 0) {
+        alert(`${jsonData.code}:${jsonData.message}`)
+        self.resetAudio()
+        this.websocket.close()
+        return
+      }
+      self.pcmPlayWork.postMessage({
+        command: 'transData',
+        data: jsonData.data.audio,
+      })
+
+      if (jsonData.code === 0 && jsonData.data.status === 2) {
+        this.websocket.close()
+      }
+    }
+    this.websocket.onerror = (e) => {
+      console.log(e)
+      console.log(e.data)
+    }
+    this.websocket.onclose = (e) => {
+      console.log(e)
+    }
+  }
+
+  resetAudio() {
+    this.audioPause()
+    this.setBtnState('unTTS')
+    this.audioDatasIndex = 0
+    this.audioDatas = []
+    this.websocket && this.websocket.close()
+    clearTimeout(this.playTimeout)
+  }
+
+  audioPlay() {
+    try {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+      }
+      if (!audioCtx) {
+        alert(notSupportTip)
+        return
+      }
+    } catch (e) {
+      alert(notSupportTip)
+      return
+    }
+    this.audioDatasIndex = 0
+    if (this.audioDatas.length) {
+      this.playSource()
+      this.setBtnState('play')
+    } else {
+      this.getAudio()
+    }
+  }
+
+  audioPause(state) {
+    if (this.playState === 'play') {
+      this.setBtnState(state || 'endPlay')
+    }
+    clearTimeout(this.playTimeout)
+    try {
+      source && source.stop()
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  playSource() {
+    let bufferLength = 0
+    let dataLength = this.audioDatas.length
+    for (let i = this.audioDatasIndex; i < dataLength; i++) {
+      bufferLength += this.audioDatas[i].length
+    }
+    let audioBuffer = audioCtx.createBuffer(1, bufferLength, 22050)
+    let offset = 0
+    let nowBuffering = audioBuffer.getChannelData(0)
+    for (let i = this.audioDatasIndex; i < dataLength; i++) {
+      let audioData = this.audioDatas[i]
+      if (audioBuffer.copyToChannel) {
+        audioBuffer.copyToChannel(audioData, 0, offset)
+      } else {
+        for (let j = 0; j < audioData.length; j++) {
+          nowBuffering[offset + j] = audioData[j]
+        }
+      }
+      offset += audioData.length
+      this.audioDatasIndex++
+    }
+
+    source = audioCtx.createBufferSource()
+    source.buffer = audioBuffer
+    source.connect(audioCtx.destination)
+    source.start()
+    source.onended = (event) => {
+      if (this.playState !== 'play') {
+        return
+      }
+      if (this.audioDatasIndex < this.audioDatas.length) {
+        this.playSource()
+      } else {
+        this.audioPause('endPlay')
+      }
+    }
+  }
+}
+
+let experience = new Experience({
+  speed: 50,
+  voice: 50,
+  pitch: 50,
+  playBtn: `.audio-ctrl-btn`,
+})
+
 export default {
   components: {
     DetailTitle,
