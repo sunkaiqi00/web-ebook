@@ -4,9 +4,7 @@
     :class="{'item-shadow' : data.type === 1 || data.type === 2}"
     @click="onItemClick"
   >
-    <keep-alive>
-      <component :is="item" :data="data" :class="{'is-edit' : isEditMode && data.type === 2}"></component>
-    </keep-alive>
+    <component :is="item" :data="data" :class="{'is-edit' : isEditMode && data.type === 2}"></component>
     <div
       :class="{'icon-selected' : data.type === 1,'is-selected' : data.selected}"
       v-show="isEditMode"

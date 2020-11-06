@@ -17,7 +17,7 @@ import { realPx } from '@/utils/utils'
 import { ebookMixin } from '@/utils/mixin'
 import { getBookmark, saveBookmark } from '@/utils/localStorage'
 const BLUE = '#346cbc'
-const WHITE = '#fff'
+const WHITE = '#bdc3c7'
 export default {
   mixins: [ebookMixin],
   data() {
@@ -181,13 +181,13 @@ export default {
     display: flex;
     .ebook-bookmark-down-wrapper {
       font-size: px2rem(16);
-      color: #fff;
+      color: #7f8c8d;
       transition: all 0.2s linear;
       @include center;
     }
     .ebook-bookmark-text {
       font-size: px2rem(12);
-      color: #fff;
+      color: #7f8c8d;
     }
   }
   .ebook-bookmark-icon-wrapper {

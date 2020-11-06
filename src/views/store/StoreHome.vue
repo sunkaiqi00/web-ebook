@@ -14,10 +14,8 @@
         :titleText="$t('home.featured')"
         :btnText="$t('home.seeAll')"
       ></featured>
-      <div class="category-list-wrapper">
-        <div class="category-list-wrapper mt" v-for="(item,index) in categoryList" :key="index">
-          <category-book :data="item"></category-book>
-        </div>
+      <div class="category-list-wrapper mt" v-for="(item,index) in categoryList" :key="index">
+        <category-book :data="item"></category-book>
       </div>
       <category class="mt" :data="categories"></category>
     </scroll>
@@ -83,6 +81,7 @@ export default {
         this.featured = data.featured
         this.categoryList = data.categoryList
         this.categories = data.categories
+        // console.log(this.categoryList)
       }
     })
   },

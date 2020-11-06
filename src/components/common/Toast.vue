@@ -49,6 +49,11 @@ export default {
       this.showText = text
     },
   },
+  beforeDestroy() {
+    if (this.$refs.toast) {
+      this.$refs.toast.style.display = 'none'
+    }
+  },
 }
 </script>
 

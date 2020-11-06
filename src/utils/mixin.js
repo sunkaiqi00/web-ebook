@@ -2,7 +2,7 @@ import { mapGetters, mapActions } from 'vuex';
 import { themeList, addCss, removeAllCss, getReadTimeToMinute } from '@/utils/book';
 import { saveLocation, getBookmark, getBookShelf, saveBookShelf } from '@/utils/localStorage';
 import { shelf } from '@/api/store';
-import { appendAddToShelf, computedId, removeAddToShelf } from '@/utils/store';
+import { appendAddToShelf, computedId, removeAddToShelf, getCategoryName } from '@/utils/store';
 export const ebookMixin = {
   computed: {
     ...mapGetters([
@@ -162,11 +162,18 @@ export const storeHomeMixin = {
     ...mapActions(['setOffsetY', 'setHotSearchOffsetY', 'setFlapCardVisible']),
     showBookDetail(book) {
       this.setFlapCardVisible(false);
+      let fileName = book.fileName;
+      let category;
+      if (!book.categoryText) {
+        category = getCategoryName(book.category);
+      } else {
+        category = book.categoryText;
+      }
       this.$router.push({
         path: '/store/detail',
         query: {
-          fileName: book.fileName,
-          category: book.categoryText
+          fileName,
+          category
         }
       });
     }
@@ -264,10 +271,6 @@ export const storeShelfMixin = {
         this.setShelfList(list).then(() => {
           this.simpleToast(this.$t('shelf.deleteGroup') + '成功');
           if (f) f();
-          // 删除分组 bug toast不隐藏
-          setTimeout(() => {
-            this.$router.go(0);
-          }, 600);
         });
       });
     }

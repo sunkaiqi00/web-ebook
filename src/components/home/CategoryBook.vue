@@ -38,6 +38,17 @@ export default {
     data: Object,
   },
   methods: {
+    // showBookDetail(item) {
+    //   console.log(item)
+    //   console.log(getCategoryName(2))
+    //   this.$router.push({
+    //     path: '/store/detail',
+    //     query: {
+    //       fileName: this.data.fileName,
+    //       category: getCategoryName(this.data.category),
+    //     },
+    //   })
+    // },
     showBookCategory() {
       this.$router.push({
         path: '/store/list',
@@ -51,6 +62,9 @@ export default {
       return categoryText(category, this)
     },
   },
+  // mounted() {
+  //   console.log(this.data)
+  // },
 }
 </script>
 

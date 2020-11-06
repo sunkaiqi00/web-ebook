@@ -147,7 +147,6 @@ export default {
     },
     // 移除分组
     moveOutFromGroup(item) {
-      console.log('aaa')
       this.setShelfList(
         this.shelfList.map((book) => {
           if (book.type === 2 && book.itemList) {
@@ -215,7 +214,7 @@ export default {
   @include scroll;
   .dialog-list-item {
     display: flex;
-    padding: px2rem(15) 0;
+    padding: px2rem(20) 0;
     box-sizing: border-box;
     color: #666;
     &.is-add {

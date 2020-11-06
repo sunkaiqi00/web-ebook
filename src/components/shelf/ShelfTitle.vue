@@ -132,7 +132,7 @@ export default {
         this.setShelfSelected(this.shelfCategory.itemList)
         this.moveOutOfGroup(this.onComplete)
       } else {
-        this.Complete()
+        this.onComplete()
       }
     },
     // 删除分组

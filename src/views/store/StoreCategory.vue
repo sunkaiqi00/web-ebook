@@ -9,9 +9,7 @@
       @onScroll="onScroll"
       v-if="isShowList"
     >
-      <keep-alive>
-        <shelf-list :top="42" :data="shelfCategory.itemList"></shelf-list>
-      </keep-alive>
+      <shelf-list :top="42" :data="shelfCategory.itemList"></shelf-list>
     </scroll>
     <div class="store-shelf-empty-view" v-else>{{$t('shelf.groupNone')}}</div>
     <shelf-footer></shelf-footer>

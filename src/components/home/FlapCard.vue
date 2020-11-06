@@ -242,6 +242,8 @@ export default {
   height: 100%;
   z-index: 200;
   background: rgba(0, 0, 0, 0.5);
+  max-width: 640px;
+  min-width: 200px;
   @include center;
   .close-btn-wrapper {
     position: absolute;
