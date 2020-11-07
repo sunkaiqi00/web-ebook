@@ -1,7 +1,12 @@
 <template>
   <div class="shelf-list" :style="{top: shelfListTop}" ref="shelfList">
     <transition-group name="list" tag="div" id="shelf-list">
-      <div class="shelf-list-item-wrapper" v-for="item in data" :key="item.id">
+      <div
+        class="shelf-list-item-wrapper"
+        v-for="item in data"
+        :key="item.id"
+        :class="{'f-start':item.type===3}"
+      >
         <shelf-item :data="item"></shelf-item>
         <div class="shelf-list-title-wrapper">
           <span class="shelf-list-title title-small">{{item.title}}</span>
@@ -15,6 +20,9 @@ import { storeShelfMixin } from '@/utils/mixin'
 import { realPx, px2rem } from '@/utils/utils'
 import ShelfItem from './ShelfItem'
 export default {
+  mounted() {
+    console.log(this.data)
+  },
   mixins: [storeShelfMixin],
   props: {
     top: {
@@ -65,6 +73,11 @@ export default {
       padding: px2rem(15);
       box-sizing: border-box;
       @include columnCenter;
+      &.f-start {
+        // @include top;
+        padding-bottom: px2rem(40);
+        box-sizing: border-box;
+      }
       &.list-leave-active {
         display: none;
       }
