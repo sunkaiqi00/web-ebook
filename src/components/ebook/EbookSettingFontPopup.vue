@@ -1,6 +1,6 @@
 <template>
   <transition name="popup-slide-up">
-    <div class="ebook-popup-list" v-show="fontFamilyVisible">
+    <div class="ebook-popup-list" v-show="fontFamilyVisible && settingVisible===0">
       <div class="ebook-popup-title">
         <div class="ebook-popup-title-icon" @click="hide">
           <span class="icon-down2"></span>
@@ -30,7 +30,7 @@ import { saveFontFamily } from '@/utils/localStorage'
 export default {
   data() {
     return {
-      fontFamiltList: FONT_FAMILY,
+      fontFamiltList: FONT_FAMILY
     }
   },
   mixins: [ebookMixin],
@@ -53,8 +53,8 @@ export default {
       } else {
         this.currentBook.rendition.themes.font(font)
       }
-    },
-  },
+    }
+  }
 }
 </script>
 <style scoped lang='scss'>

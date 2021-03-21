@@ -25,7 +25,7 @@
           </div>
         </div>
       </transition>
-      <div class="content-bg" @click="hideTitleAndMenu()"></div>
+      <div class="content-bg" @click="onHideSlide"></div>
     </div>
   </transition>
 </template>
@@ -37,20 +37,24 @@ import EbookLoading from './EbookLoading'
 export default {
   mixins: [ebookMixin],
   components: {
-    EbookLoading,
+    EbookLoading
   },
   data() {
     return {
       currentTab: 1,
       content: EbookSlideContent,
-      bookMark: EbookSlideBookmarrk,
+      bookMark: EbookSlideBookmarrk
     }
   },
   methods: {
     selectTab(tab) {
       this.currentTab = tab
     },
-  },
+    onHideSlide() {
+      this.currentTab = 1
+      this.hideTitleAndMenu()
+    }
+  }
 }
 </script>
 <style scoped lang='scss'>

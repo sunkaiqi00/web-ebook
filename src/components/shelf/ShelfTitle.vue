@@ -38,12 +38,12 @@ import { clearLocalForage } from '@/utils/localForage'
 export default {
   mixins: [storeShelfMixin],
   props: {
-    title: String,
+    title: String
   },
   data() {
     return {
       // 隐藏阴影
-      ifHideTitleShadow: true,
+      ifHideTitleShadow: true
     }
   },
   computed: {
@@ -79,7 +79,7 @@ export default {
         : selectNumber === 1
         ? this.$t('shelf.haveSelectedBook').replace('$1', selectNumber)
         : this.$t('shelf.haveSelectedBooks').replace('$1', selectNumber)
-    },
+    }
   },
   // 监听滚动高度 是否添加阴影
   watch: {
@@ -89,7 +89,7 @@ export default {
       } else {
         this.ifHideTitleShadow = true
       }
-    },
+    }
   },
   methods: {
     // 隐藏popup
@@ -101,14 +101,14 @@ export default {
       return {
         text: text,
         type: type,
-        click: onClick,
+        click: onClick
       }
     },
     onComplete() {
       this.hidePopup()
       // 书架列表中删除 删除书列表中的当前分类列表
       this.setShelfList(
-        this.shelfList.filter((book) => book.id !== this.shelfCategory.id)
+        this.shelfList.filter(book => book.id !== this.shelfCategory.id)
       ).then(() => {
         saveBookShelf(this.shelfList)
         this.setShelfList(this.shelfList)
@@ -123,7 +123,7 @@ export default {
       this.hidePopup()
       this.dialog({
         showNewGroup: true,
-        groupName: this.shelfCategory.title,
+        groupName: this.shelfCategory.title
       }).show()
     },
     // 点击确定删除 弹出确认框
@@ -151,8 +151,8 @@ export default {
             ),
             this.createPopupBtn(this.$t('shelf.cancel'), () => {
               this.hidePopup()
-            }),
-          ],
+            })
+          ]
         }).show()
       }, 200)
     },
@@ -172,8 +172,8 @@ export default {
           ),
           this.createPopupBtn(this.$t('shelf.cancel'), () => {
             this.hidePopup()
-          }),
-        ],
+          })
+        ]
       }).show()
     },
     back() {
@@ -184,10 +184,10 @@ export default {
     onEditClick() {
       if (!this.isEditMode) {
         this.setShelfSelected([])
-        this.shelfList.forEach((item) => {
+        this.shelfList.forEach(item => {
           item.selected = false
           if (item.itemList) {
-            item.itemList.forEach((item) => (item.selected = false))
+            item.itemList.forEach(item => (item.selected = false))
           }
         })
       }
@@ -203,8 +203,8 @@ export default {
       this.setShelfSelected([])
       this.getShelfList() // mixin 方法
       this.simpleToast(this.$t('shelf.clearCacheSuccess'))
-    },
-  },
+    }
+  }
 }
 </script>
 <style scoped lang='scss'>

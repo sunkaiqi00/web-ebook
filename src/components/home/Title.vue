@@ -9,13 +9,13 @@
 export default {
   props: {
     label: String,
-    btn: String,
+    btn: String
   },
   methods: {
     click() {
       this.$emit('onClick')
-    },
-  },
+    }
+  }
 }
 </script>
 

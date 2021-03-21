@@ -19,13 +19,13 @@ import ShelfItemAdd from './ShelfItemAdd'
 export default {
   mixins: [storeShelfMixin],
   props: {
-    data: Object,
+    data: Object
   },
   data() {
     return {
       book: ShelfItemBook,
       category: ShelfItemCategory,
-      add: ShelfItemAdd,
+      add: ShelfItemAdd
     }
   },
   computed: {
@@ -35,7 +35,7 @@ export default {
         : this.data.type === 2
         ? this.category
         : this.add
-    },
+    }
   },
   methods: {
     onItemClick() {
@@ -46,7 +46,7 @@ export default {
           this.shelfSelected.pushWithoutDuplicate(this.data)
         } else {
           this.setShelfSelected(
-            this.shelfSelected.filter((item) => item.id !== this.data.id)
+            this.shelfSelected.filter(item => item.id !== this.data.id)
           )
         }
       } else {
@@ -56,15 +56,15 @@ export default {
           this.$router.push({
             path: '/store/category',
             query: {
-              title: this.data.title,
-            },
+              title: this.data.title
+            }
           })
         } else {
           this.$router.push('/store/home')
         }
       }
-    },
-  },
+    }
+  }
 }
 </script>
 <style scoped lang='scss'>
@@ -76,6 +76,7 @@ export default {
   // height: 100%;
   height: px2rem(132);
   background: #fff;
+  cursor: pointer;
   &.item-shadow {
     box-shadow: 0 0 px2rem(10) rgba(0, 0, 0, 0.3);
   }
@@ -86,7 +87,7 @@ export default {
     position: absolute;
     right: px2rem(2);
     bottom: px2rem(2);
-    font-size: px2rem(22);
+    font-size: px2rem(18);
     color: rgba(255, 255, 255, 0.3);
     &.is-selected {
       color: $color-blue;

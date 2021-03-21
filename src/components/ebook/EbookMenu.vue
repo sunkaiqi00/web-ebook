@@ -41,13 +41,16 @@ export default {
     EbookSettingFontPopup,
     EbookSettingTheme,
     EbookSettingProgress,
-    EbookSlide,
+    EbookSlide
   },
   methods: {
     showSetting(key) {
+      if (key && this.fontFamilyVisible) {
+        this.setFontFamilyVisible(false)
+      }
       this.setSettingVisible(key)
-    },
-  },
+    }
+  }
 }
 </script>
 <style scoped lang='scss'>

@@ -8,12 +8,13 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
   computed: {
     key() {
       return this.$route.path.replace('///g', '~')
-    },
-  },
+    }
+  }
 }
 // 设置1rem的值为多少
 document.addEventListener('DOMContentLoaded', () => {

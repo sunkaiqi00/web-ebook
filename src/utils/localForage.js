@@ -21,7 +21,7 @@ export function removeLocalForage(key, cb, cb2) {
   localForage
     .removeItem(key)
     .then(function() {
-      if (cs) cb();
+      if (cb) cb();
     })
     .catch(function(err) {
       if (cb2) cb2(err);

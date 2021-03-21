@@ -27,11 +27,11 @@ import { storeHomeMixin } from '@/utils/mixin'
 export default {
   mixins: [storeHomeMixin],
   components: {
-    TitleView,
+    TitleView
   },
   props: {
-    data: Array,
-  },
+    data: Array
+  }
 }
 </script>
 

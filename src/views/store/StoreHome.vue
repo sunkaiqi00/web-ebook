@@ -43,7 +43,7 @@ export default {
       recommend: null, // 推荐
       featured: null, // 精选
       categoryList: null, // 列表
-      categories: null, // 所有分类
+      categories: null // 所有分类
     }
   },
   components: {
@@ -54,7 +54,7 @@ export default {
     Recommend,
     Featured,
     CategoryBook,
-    Category,
+    Category
   },
 
   methods: {
@@ -66,13 +66,12 @@ export default {
         this.scrollTop = 94
       }
       this.$refs.scroll.refresh()
-    },
+    }
   },
   mounted() {
-    home().then((res) => {
+    home().then(res => {
       if (res && res.status === 200) {
         let data = res.data
-        // console.log(data)
         let randomIndex = Math.floor(Math.random() * data.random.length)
         this.random = data.random[randomIndex]
         this.banner = data.banner
@@ -84,7 +83,7 @@ export default {
         // console.log(this.categoryList)
       }
     })
-  },
+  }
 }
 </script>
 <style scoped lang='scss'>

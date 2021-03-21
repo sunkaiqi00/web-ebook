@@ -20,26 +20,23 @@ import { storeShelfMixin } from '@/utils/mixin'
 import { realPx, px2rem } from '@/utils/utils'
 import ShelfItem from './ShelfItem'
 export default {
-  mounted() {
-    console.log(this.data)
-  },
   mixins: [storeShelfMixin],
   props: {
     top: {
       type: Number,
-      default: 94,
+      default: 94
     },
-    data: Array,
+    data: Array
   },
   components: {
-    ShelfItem,
+    ShelfItem
   },
   computed: {
     // 定位 top 高度
     shelfListTop() {
       return px2rem(this.top) + 'rem'
-    },
-  },
+    }
+  }
   // methods: {
   // 每个书 item的高度 图片为250*350(比例)  有四个30的padding
   //   itemHeight() {

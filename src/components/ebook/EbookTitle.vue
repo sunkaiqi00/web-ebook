@@ -29,8 +29,8 @@ export default {
     },
     goShelf() {
       this.$router.push('/store/shelf')
-    },
-  },
+    }
+  }
 }
 </script>
 <style scoped lang='scss'>
