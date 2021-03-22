@@ -20,11 +20,11 @@
 <script>
 export default {
   props: {
-    title: String,
+    title: String
   },
   data() {
     return {
-      visible: false,
+      visible: false
     }
   },
   methods: {
@@ -33,8 +33,8 @@ export default {
     },
     hide() {
       this.visible = false
-    },
-  },
+    }
+  }
 }
 </script>
 
@@ -48,7 +48,7 @@ export default {
   bottom: 0;
   right: 0;
   margin: auto;
-  z-index: 2000;
+  z-index: 5000;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.2);

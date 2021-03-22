@@ -54,14 +54,14 @@ export default {
   name: 'group-dialog',
   mixins: [storeShelfMixin],
   components: {
-    EbookDialog,
+    EbookDialog
   },
   props: {
     showNewGroup: {
       type: Boolean,
-      default: false,
+      default: false
     },
-    groupName: String,
+    groupName: String
   },
   computed: {
     isInGroup() {
@@ -71,16 +71,16 @@ export default {
       return [
         {
           title: this.$t('shelf.newGroup'),
-          edit: 1,
+          edit: 1
         },
         {
           title: this.$t('shelf.groupOut'),
-          edit: 2,
-        },
+          edit: 2
+        }
       ]
     },
     category() {
-      return this.shelfList.filter((item) => item.type === 2)
+      return this.shelfList.filter(item => item.type === 2)
     },
     categoryList() {
       return [...this.defaultCategory, ...this.category]
@@ -89,12 +89,12 @@ export default {
       return !this.ifNewGroup
         ? this.$t('shelf.moveBook')
         : this.$t('shelf.newGroup')
-    },
+    }
   },
   data() {
     return {
       ifNewGroup: false,
-      newGroupName: '',
+      newGroupName: ''
     }
   },
   methods: {
@@ -124,9 +124,9 @@ export default {
     // 移动到其他分组
     moveToGroup(group) {
       this.setShelfList(
-        this.shelfList.filter((book) => {
+        this.shelfList.filter(book => {
           if (book.itemList) {
-            book.itemList = book.itemList.filter((subBook) => {
+            book.itemList = book.itemList.filter(subBook => {
               return this.shelfSelected.indexOf(subBook) < 0
             })
           }
@@ -148,9 +148,9 @@ export default {
     // 移除分组
     moveOutFromGroup(item) {
       this.setShelfList(
-        this.shelfList.map((book) => {
+        this.shelfList.map(book => {
           if (book.type === 2 && book.itemList) {
-            book.itemList = book.itemList.filter((subBook) => !subBook.selected)
+            book.itemList = book.itemList.filter(subBook => !subBook.selected)
           }
           return book
         })
@@ -180,7 +180,7 @@ export default {
           itemList: [],
           selected: false,
           title: this.newGroupName,
-          type: 2,
+          type: 2
         }
         let list = removeAddToShelf(this.shelfList)
         list.push(group)
@@ -198,8 +198,8 @@ export default {
       saveBookShelf(this.shelfList)
       this.hide()
       this.setIsEditMode(false)
-    },
-  },
+    }
+  }
 }
 </script>
 
@@ -212,6 +212,7 @@ export default {
   box-sizing: border-box;
   font-size: px2rem(14);
   @include scroll;
+  z-index: 5000;
   .dialog-list-item {
     display: flex;
     padding: px2rem(20) 0;

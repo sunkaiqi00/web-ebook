@@ -22,14 +22,14 @@ export default {
   name: 'Popup',
   props: {
     title: String,
-    btn: Array,
+    btn: Array
   },
   data() {
     return {
       // popup 组件隐藏
       popupVisible: false,
       // popup 底部控件隐藏
-      visible: false,
+      visible: false
     }
   },
   methods: {
@@ -44,8 +44,8 @@ export default {
       setTimeout(() => {
         this.popupVisible = false
       }, 200)
-    },
-  },
+    }
+  }
 }
 </script>
 <style scoped lang='scss'>
@@ -56,7 +56,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 500;
+  z-index: 5000;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
