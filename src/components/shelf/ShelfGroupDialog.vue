@@ -212,7 +212,6 @@ export default {
   box-sizing: border-box;
   font-size: px2rem(14);
   @include scroll;
-  z-index: 5000;
   .dialog-list-item {
     display: flex;
     padding: px2rem(20) 0;
