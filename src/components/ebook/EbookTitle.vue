@@ -64,4 +64,7 @@ export default {
     }
   }
 }
+.icon-back {
+  cursor: pointer;
+}
 </style>

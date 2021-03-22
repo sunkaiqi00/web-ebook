@@ -75,13 +75,13 @@ import { px2rem } from '@/utils/utils'
 export default {
   mixins: [ebookMixin],
   components: {
-    scroll,
+    scroll
   },
   data() {
     return {
       searchVisible: false,
       searchList: [],
-      searchText: '',
+      searchText: ''
     }
   },
   methods: {
@@ -89,6 +89,9 @@ export default {
     displayContent(target, highlight = false) {
       this.display(target, () => {
         this.hideTitleAndMenu()
+        this.searchText = ''
+        this.searchVisible = false
+        this.searchList = []
         // 跳转到的页面 对应搜索关键字高亮显示
         if (highlight) {
           this.currentBook.rendition.annotations.highlight(target)
@@ -98,7 +101,7 @@ export default {
     // 下级目录 缩进
     contentItemStyle(item) {
       return {
-        marginLeft: `${px2rem(item.level * 15)}rem`,
+        marginLeft: `${px2rem(item.level * 15)}rem`
       }
     },
     hideSearchPage() {
@@ -112,20 +115,20 @@ export default {
     // 全文搜索
     doSearch(q) {
       return Promise.all(
-        this.currentBook.spine.spineItems.map((section) =>
+        this.currentBook.spine.spineItems.map(section =>
           section
             .load(this.currentBook.load.bind(this.currentBook))
             .then(section.find.bind(section, q))
             .finally(section.unload.bind(section))
         )
-      ).then((results) => Promise.resolve([].concat.apply([], results)))
+      ).then(results => Promise.resolve([].concat.apply([], results)))
     },
     // 渲染搜索结果
     search() {
       if (this.searchText && this.searchText.length > 0) {
-        this.doSearch(this.searchText).then((list) => {
+        this.doSearch(this.searchText).then(list => {
           // 文字高亮显示
-          this.searchList = list.map((item) => {
+          this.searchList = list.map(item => {
             item.excerpt = item.excerpt.replace(
               this.searchText,
               `<span class='content-search-text'>${this.searchText}</span>`
@@ -134,8 +137,8 @@ export default {
           })
         })
       }
-    },
-  },
+    }
+  }
 }
 </script>
 <style scoped lang='scss'>

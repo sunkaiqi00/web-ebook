@@ -81,3 +81,7 @@ $text-tiny-max-height: px2rem(12);
   color: #999;
   @include ellipsis2(1);
 }
+
+[class^='icon-'] {
+  cursor: pointer;
+}

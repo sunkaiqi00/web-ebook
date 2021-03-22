@@ -77,4 +77,10 @@ export default {
     }
   }
 }
+.icon-A,
+.icon-menu,
+.icon-progress,
+.bright {
+  cursor: pointer;
+}
 </style>
